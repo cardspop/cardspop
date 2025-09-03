@@ -6,6 +6,8 @@ permalink: /tools/comps/
 
 Build a quick eBay search for sold or active listings. This does not track you or use any backend.
 
+Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · [How to Grade Cards]({{ '/guides/grading/' | relative_url }})
+
 <form id="comp-form" class="comp-form" onsubmit="return false;">
   <div class="row">
     <label>Year

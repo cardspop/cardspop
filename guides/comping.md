@@ -29,5 +29,6 @@ Decision
 - If grading: use PSA 9/10 comps minus fees to decide submission.
 - If selling raw: price slightly above comp midpoint; watch best offers.
 
-Try the Comp Builder under Tools for one‑click eBay queries.
-
+Try these Tools
+- [Comp Builder]({{ '/tools/comps/' | relative_url }}) — one‑click eBay searches (sold/active, filters).
+- [Grade ROI Calculator]({{ '/tools/grade-roi/' | relative_url }}) — EV of grading vs selling raw.

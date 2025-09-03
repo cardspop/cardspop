@@ -50,3 +50,6 @@ Pass/Fail decision
 Storage if not grading
 - Clean sleeve + toploader/mag, team bag; store upright; low humidity.
 
+Helpful tools
+- [Centering Overlay]({{ '/tools/centering/' | relative_url }}) to estimate centering ratios.
+- [Grade ROI Calculator]({{ '/tools/grade-roi/' | relative_url }}) to weigh grading vs selling raw.
