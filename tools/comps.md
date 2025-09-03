@@ -84,7 +84,21 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
     <button class="btn btn--secondary" id="activeAll" style="margin-left:.5rem">Active (All Variants)</button>
     <button class="btn" id="copy" style="margin-left:.5rem">Copy Link</button>
   </div>
+  <div class="row">
+    <button class="btn" id="showSold">Show Sold Links</button>
+    <button class="btn btn--secondary" id="showActive" style="margin-left:.5rem">Show Active Links</button>
+    <button class="btn" id="showAll" style="margin-left:.5rem">Show All Variants</button>
+  </div>
 </form>
+
+<div id="comp-results" class="comp-results" hidden>
+  <h3>Search Link Preview</h3>
+  <div id="results-summary" class="results-summary"></div>
+  <ul id="results-list" class="results-list"></ul>
+  <div class="row">
+    <button class="btn" id="openShown">Open Shown In Tabs</button>
+  </div>
+</div>
 
 <script>
 (function(){
@@ -176,6 +190,20 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
   function openUrlAll(sold){
     buildUrls(sold, true).forEach(u=> window.open(u, '_blank'));
   }
+  function renderResults(sold, allVariants){
+    const urls = buildUrls(sold, !!allVariants);
+    const box = document.getElementById('comp-results');
+    const list = document.getElementById('results-list');
+    const summary = document.getElementById('results-summary');
+    list.innerHTML = '';
+    urls.forEach((u, i)=>{
+      const li = document.createElement('li');
+      li.innerHTML = `<a href="${u}" target="_blank">Link ${i+1}</a>`;
+      list.appendChild(li);
+    });
+    summary.textContent = `${sold ? 'Sold' : 'Active'} · ${urls.length} link${urls.length!==1?'s':''}`;
+    box.hidden = false;
+  }
   function copyLink(){
     const urls = buildUrls(true, false);
     const url = urls[0];
@@ -186,6 +214,12 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
   document.getElementById('active').addEventListener('click', () => openUrl(false));
   document.getElementById('soldAll').addEventListener('click', () => openUrlAll(true));
   document.getElementById('activeAll').addEventListener('click', () => openUrlAll(false));
+  document.getElementById('showSold').addEventListener('click', () => renderResults(true, false));
+  document.getElementById('showActive').addEventListener('click', () => renderResults(false, false));
+  document.getElementById('showAll').addEventListener('click', () => renderResults(true, true));
+  document.getElementById('openShown').addEventListener('click', () => {
+    document.querySelectorAll('#results-list a').forEach(a=> window.open(a.href, '_blank'));
+  });
   document.getElementById('copy').addEventListener('click', copyLink);
 })();
 </script>
@@ -197,6 +231,10 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
 .comp-form input[type="text"], .comp-form input[type="number"], .comp-form select { padding: .55rem .6rem; border-radius: 8px; border: 1px solid var(--border); min-width: 15rem; }
 fieldset { border: 1px solid var(--border); border-radius: 8px; padding: .5rem .75rem; }
 legend { padding: 0 .25rem; color: var(--muted); }
+.comp-results { margin-top: 1rem; }
+.comp-results .results-list { list-style: none; padding: 0; }
+.comp-results .results-list li { padding: .35rem 0; border-bottom: 1px solid var(--border); }
+.comp-results .results-summary { color: var(--muted); margin-bottom: .35rem; }
 </style>
 
 Tips
