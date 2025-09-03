@@ -9,6 +9,7 @@ title: Home
     <p class="hero__tagline">{{ site.description | escape }}</p>
     <p style="margin-top:1rem">
       <a class="btn" href="{{ '/blog/' | relative_url }}">Read the blog →</a>
+      <a class="btn btn--secondary" style="margin-left:.5rem" href="https://github.com/cardspop">GitHub</a>
     </p>
   </div>
   
