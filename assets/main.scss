@@ -25,6 +25,17 @@
     --border: #22304a;
     --accent: #5B7DB1; /* lighter navy for dark */
   }
+
+  /* Ensure key surfaces and text use dark tokens */
+  body, .site-header, .site-footer, .page-content { background: var(--bg); color: var(--text); }
+  .site-header { border-bottom-color: var(--border); }
+  .site-footer { border-top: 1px solid var(--border); }
+  a { color: var(--accent); }
+  .home .post-list > li:hover { background: rgba(255,255,255,0.05); }
+
+  /* Code blocks readable on dark */
+  pre, code { color: var(--text); }
+  pre { background: #121a2b; border-color: #1c2942; }
 }
 
 /* Explicit overrides when user toggles theme */
@@ -52,6 +63,10 @@ body {
 .site-nav .page-link:hover { color: var(--text); }
 .theme-toggle { margin-left: .75rem; border: 1px solid var(--border); background: transparent; color: var(--muted); border-radius: 8px; padding: .35rem .55rem; cursor: pointer; }
 .theme-toggle:hover { color: var(--text); }
+
+/* Also apply dark overrides when toggled manually */
+html[data-theme='dark'] .home .post-list > li:hover { background: rgba(255,255,255,0.05); }
+html[data-theme='dark'] pre { background: #121a2b; border-color: #1c2942; }
 
 /* Links */
 a { color: var(--accent); }
