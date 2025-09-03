@@ -2,7 +2,8 @@
 
 This is a dead-simple blog that builds on GitHub Pages using Jekyll's built-in **minima** theme. Write posts in Markdown; push to `main`; the site updates automatically.
 
-Repo name should be `cardspop.github.io` for user site hosting.
+This copy is configured for a Project Page under the repo `html`.
+It will be served at `https://cardspop.github.io/html/` once Pages is enabled.
 
 ## Structure
 
@@ -30,11 +31,10 @@ Repo name should be `cardspop.github.io` for user site hosting.
 - Big downloads: attach to a GitHub **Release** and link to it.
 - Images: keep in `assets/`, add `loading="lazy"` where helpful.
 
-## Deploy to GitHub Pages
+## Deploy to GitHub Pages (Project Page)
 
-1. Push this repo to GitHub under `cardspop.github.io` (public).
-2. Use the `main` branch.
-3. Visit `https://cardspop.github.io` after a minute or two.
+1. Push this repo to GitHub under `cardspop/html` (public) on the `main` branch.
+2. In GitHub: Settings → Pages → Build and deployment → Deploy from a branch → Branch: `main`, Folder: `/ (root)`.
+3. Visit `https://cardspop.github.io/html/` after a minute or two.
 
-Optional: add a `CNAME` file with `blog.yourdomain.com` and point DNS (CNAME) to `cardspop.github.io`.
-
+Optional: add a `CNAME` file with your custom subdomain (e.g., `blog.yourdomain.com`) and configure Pages to use it.
