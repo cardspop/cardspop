@@ -3,7 +3,7 @@
 @import "minima";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
-/* CardsPop overrides after Minima */
+/* Minimal modern look & feel overrides for Minima (light theme only) */
 
 :root {
   --font-sans: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
@@ -17,30 +17,6 @@
   --border: #e2e8f0;     /* slate-200 */
   --accent: var(--brand-navy);
 }
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0b1020;
-    --text: #e2e8f0;
-    --muted: #94a3b8;
-    --border: #22304a;
-    --accent: #5B7DB1; /* lighter navy for dark */
-  }
-
-  /* Ensure key surfaces and text use dark tokens */
-  body, .site-header, .site-footer, .page-content { background: var(--bg); color: var(--text); }
-  .site-header { border-bottom-color: var(--border); }
-  .site-footer { border-top: 1px solid var(--border); }
-  a { color: var(--accent); }
-  .home .post-list > li:hover { background: rgba(255,255,255,0.05); }
-
-  /* Code blocks readable on dark */
-  pre, code { color: var(--text); }
-  pre { background: #121a2b; border-color: #1c2942; }
-}
-
-/* Explicit overrides when user toggles theme */
-html[data-theme='light'] { --bg: #ffffff; --text: #0f172a; --muted: #475569; --border: #e2e8f0; --accent: var(--brand-navy); }
-html[data-theme='dark']  { --bg: #0b1020; --text: #e2e8f0; --muted: #94a3b8; --border: #22304a; --accent: #5B7DB1; }
 
 html { scroll-behavior: smooth; }
 body {
@@ -61,12 +37,6 @@ body {
 .site-title, .site-title:visited { color: var(--text); font-weight: 700; }
 .site-nav .page-link { color: var(--muted); }
 .site-nav .page-link:hover { color: var(--text); }
-.theme-toggle { margin-left: .75rem; border: 1px solid var(--border); background: transparent; color: var(--muted); border-radius: 8px; padding: .35rem .55rem; cursor: pointer; }
-.theme-toggle:hover { color: var(--text); }
-
-/* Also apply dark overrides when toggled manually */
-html[data-theme='dark'] .home .post-list > li:hover { background: rgba(255,255,255,0.05); }
-html[data-theme='dark'] pre { background: #121a2b; border-color: #1c2942; }
 
 /* Links */
 a { color: var(--accent); }
@@ -80,7 +50,7 @@ a:hover { text-decoration: none; filter: brightness(0.9); }
   margin-bottom: 1rem;
   transition: transform .05s ease, background .2s ease;
 }
-.home .post-list > li:hover { transform: translateY(-1px); background: rgba(0,0,0,0.02); }
+.home .post-list > li:hover { transform: translateY(-1px); background: rgba(0,0,0,0.03); }
 .post-list .post-link { font-weight: 600; }
 .post-meta { color: var(--muted); }
 
@@ -107,27 +77,8 @@ pre { border-radius: 8px; }
 }
 .video .caption { font-size: 0.9rem; color: var(--muted); margin-top: 0.25rem; }
 
-/* Hero */
+/* Hero (stronger gradient for visibility) */
 .hero { padding: 2.5rem 0 1.25rem; border-bottom: 1px solid var(--border); background:
-  radial-gradient(1200px 400px at 10% -20%, rgba(12, 35, 64, 0.16), transparent 60%),
-  radial-gradient(1200px 400px at 90% -20%, rgba(200, 16, 46, 0.16), transparent 60%);
+  radial-gradient(1200px 400px at 10% -20%, rgba(12, 35, 64, 0.24), transparent 60%),
+  radial-gradient(1200px 400px at 90% -20%, rgba(200, 16, 46, 0.22), transparent 60%);
 }
-
-/* Stronger, lighter-tinted gradient for dark mode for better visibility */
-@media (prefers-color-scheme: dark) {
-  .hero { background:
-    radial-gradient(1200px 400px at 10% -20%, rgba(91, 125, 177, 0.35), transparent 60%),
-    radial-gradient(1200px 400px at 90% -20%, rgba(200, 16, 46, 0.25), transparent 60%);
-  }
-}
-html[data-theme='dark'] .hero { background:
-  radial-gradient(1200px 400px at 10% -20%, rgba(91, 125, 177, 0.35), transparent 60%),
-  radial-gradient(1200px 400px at 90% -20%, rgba(200, 16, 46, 0.25), transparent 60%);
-}
-.hero__title { margin: 0; font-size: clamp(1.75rem, 3vw, 2.25rem); line-height: 1.2; }
-.hero__tagline { margin: .5rem 0 0; color: var(--muted); }
-
-/* Buttons */
-.btn { display: inline-block; background: var(--accent); color: #fff; padding: .6rem .9rem; border-radius: 10px; text-decoration: none; font-weight: 600; }
-.btn:hover { filter: brightness(0.95); }
-.btn--secondary { background: var(--brand-red); }
