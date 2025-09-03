@@ -2,10 +2,9 @@ title: Your Blog Title
 description: Notes, tutorials, and resources.
 theme: minima
 
-# When hosting as a Project Page (not username.github.io),
-# set your site URL and baseurl for correct links.
+# User/Org site at root domain
 url: https://cardspop.github.io
-baseurl: /html
+# baseurl intentionally omitted for root site
 
 # Optional but nice: enables RSS and good meta tags
 plugins:
