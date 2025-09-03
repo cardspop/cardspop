@@ -2,9 +2,9 @@ title: Your Blog Title
 description: Notes, tutorials, and resources.
 theme: minima
 
-# User/Org site at root domain
+# Project Page under /cardspop
 url: https://cardspop.github.io
-# baseurl intentionally omitted for root site
+baseurl: /cardspop
 
 # Optional but nice: enables RSS and good meta tags
 plugins:

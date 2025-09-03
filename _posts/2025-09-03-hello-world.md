@@ -22,8 +22,8 @@ This is your first post. Replace the placeholders below with your content.
 
 ## Big download (GitHub Release)
 
-- Releases page: https://github.com/cardspop/html/releases
+- Releases page: https://github.com/cardspop/cardspop/releases
 - Direct download example (replace filename):
-- [Download slides (PDF)](https://github.com/cardspop/html/releases/latest/download/slides.pdf)
+- [Download slides (PDF)](https://github.com/cardspop/cardspop/releases/latest/download/slides.pdf)
 
 Tip: Upload assets to a Release. The `latest/download/filename` URL always points to the most recent release asset with that name.
