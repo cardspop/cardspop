@@ -22,3 +22,5 @@ minima:
 header_pages:
   - about.md
   - blog/index.md
+  - guides/index.md
+  - tools/index.md
