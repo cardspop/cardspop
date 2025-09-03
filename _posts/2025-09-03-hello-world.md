@@ -22,8 +22,8 @@ This is your first post. Replace the placeholders below with your content.
 
 ## Big download (GitHub Release)
 
-- Example release download link:
-- [Download slides (PDF)](https://github.com/your-username/your-repo/releases/download/v1.0/slides.pdf)
+- Releases page: https://github.com/cardspop/html/releases
+- Direct download example (replace filename):
+- [Download slides (PDF)](https://github.com/cardspop/html/releases/latest/download/slides.pdf)
 
-Tip: Use GitHub Releases for large, versioned files. It keeps the repo light and provides a CDN-backed URL.
-
+Tip: Upload assets to a Release. The `latest/download/filename` URL always points to the most recent release asset with that name.
