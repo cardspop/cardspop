@@ -1,0 +1,49 @@
+slug: 2024-topps-series-1
+year: 2024
+brand: Topps Series 1
+sport: Baseball
+notes: Base + parallels, rookies highlighted
+checklist:
+  - no: 1
+    player: Ronald Acuña Jr.
+    team: ATL
+  - no: 7
+    player: Shohei Ohtani
+    team: LAD
+  - no: 25
+    player: Aaron Judge
+    team: NYY
+  - no: 50
+    player: Elly De La Cruz (RC)
+    team: CIN
+    rc: true
+  - no: 88
+    player: Julio Rodríguez
+    team: SEA
+  - no: 100
+    player: Mike Trout
+    team: LAA
+  - no: 150
+    player: Corbin Carroll
+    team: ARI
+  - no: 200
+    player: Mookie Betts
+    team: LAD
+  - no: 250
+    player: Gunnar Henderson (RC)
+    team: BAL
+    rc: true
+  - no: 300
+    player: Bryce Harper
+    team: PHI
+parallels:
+  - name: Rainbow Foil
+  - name: Gold Foil
+  - name: Gold /2024
+  - name: Orange /299
+  - name: Red /199
+  - name: Vintage Stock /99
+  - name: Independence Day /76
+  - name: Black /72
+  - name: Platinum /1
+
