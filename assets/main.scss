@@ -53,6 +53,10 @@ body {
 .theme-toggle { margin-left: .75rem; border: 1px solid var(--border); background: transparent; color: var(--muted); border-radius: 8px; padding: .35rem .55rem; cursor: pointer; }
 .theme-toggle:hover { color: var(--text); }
 
+/* Links */
+a { color: var(--accent); }
+a:hover { text-decoration: none; filter: brightness(0.9); }
+
 /* Post list cards */
 .home .post-list > li { 
   border: 1px solid var(--border);
