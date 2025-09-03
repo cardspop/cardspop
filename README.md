@@ -38,4 +38,28 @@ It will be served at `https://cardspop.github.io/cardspop/` once Pages is enable
 3. In GitHub: Settings → Pages → Build and deployment → Deploy from a branch → Branch: `main`, Folder: `/ (root)`.
 4. Visit `https://cardspop.github.io/cardspop/` after a minute or two.
 
+## Preview locally
+
+Option A — Ruby/Jekyll (matches GitHub Pages)
+
+1. Install Ruby (3.x) and Bundler.
+2. In this folder, run:
+   ```bash
+   bundle install
+   bundle exec jekyll serve --livereload
+   ```
+3. Open: http://127.0.0.1:4000/cardspop/
+
+Option B — Docker (no Ruby on your machine)
+
+```bash
+docker run --rm -it \
+  -p 4000:4000 \
+  -v "$PWD":/srv/jekyll \
+  -w /srv/jekyll \
+  jekyll/jekyll:4 \
+  sh -lc "bundle install && jekyll serve --host 0.0.0.0 --livereload"
+```
+Then open: http://127.0.0.1:4000/cardspop/
+
 Optional: add a `CNAME` file with your custom domain (e.g., `blog.yourdomain.com`) and configure Pages to use it.
