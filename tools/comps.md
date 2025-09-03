@@ -48,10 +48,13 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
   </div>
   <div class="row">
     <fieldset>
-      <legend>Condition filter</legend>
-      <label><input type="radio" name="cond" value="raw" checked> Raw</label>
-      <label><input type="radio" name="cond" value="psa10"> PSA 10</label>
-      <label><input type="radio" name="cond" value="psa9"> PSA 9</label>
+      <legend>Condition filters</legend>
+      <label><input type="checkbox" id="condRaw" checked> Raw</label>
+      <label><input type="checkbox" id="condPSA10"> PSA 10</label>
+      <label><input type="checkbox" id="condPSA9"> PSA 9</label>
+      <label><input type="checkbox" id="condBGS95"> BGS 9.5</label>
+      <label><input type="checkbox" id="condSGC10"> SGC 10</label>
+      <label><input type="checkbox" id="condCGC10"> CGC 10</label>
     </fieldset>
     <fieldset>
       <legend>Listing type</legend>
@@ -67,8 +70,18 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
     </fieldset>
   </div>
   <div class="row">
+    <fieldset>
+      <legend>Synonym presets</legend>
+      <label><input type="checkbox" id="synRC"> RC ↔ Rookie Card</label>
+      <label><input type="checkbox" id="synRefractor"> Refractor ↔ Silver Prizm</label>
+      <label><input type="checkbox" id="synNumbering"> /xx ↔ #/xx</label>
+    </fieldset>
+  </div>
+  <div class="row">
     <button class="btn" id="sold">Open Sold</button>
     <button class="btn btn--secondary" id="active" style="margin-left:.5rem">Open Active</button>
+    <button class="btn" id="soldAll" style="margin-left:.5rem">Sold (All Variants)</button>
+    <button class="btn btn--secondary" id="activeAll" style="margin-left:.5rem">Active (All Variants)</button>
     <button class="btn" id="copy" style="margin-left:.5rem">Copy Link</button>
   </div>
 </form>
@@ -76,27 +89,26 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
 <script>
 (function(){
   const enc = s => encodeURIComponent(s.trim()).replace(/%20/g, '+');
-  function buildQuery() {
+  function baseParts(){
     const year = document.getElementById('year').value.trim();
     const brand = document.getElementById('brand').value.trim();
     const player = document.getElementById('player').value.trim();
     const parallel = document.getElementById('parallel').value.trim();
     const cardNo = document.getElementById('cardNo').value.trim();
-    const exactPlayer = document.getElementById('exactPlayer').checked;
-    const exactParallel = document.getElementById('exactParallel').checked;
-    const excludeLots = document.getElementById('excludeLots').checked;
-    const cond = (document.querySelector('input[name="cond"]:checked')||{}).value;
-    let parts = [];
+    const exactPlayer = document.getElementById('exactPlayer')?.checked;
+    const exactParallel = document.getElementById('exactParallel')?.checked;
+    const excludeLots = document.getElementById('excludeLots')?.checked;
+    const parts = [];
     if (year) parts.push(year);
     if (brand) parts.push(brand);
     if (player) parts.push(exactPlayer ? `"${player}"` : player);
     if (parallel) parts.push(exactParallel ? `"${parallel}"` : parallel);
     if (cardNo) parts.push(cardNo.startsWith('#') ? cardNo : `#${cardNo}`);
+    return { parts, excludeLots };
+  }
+  function toQuery(parts, modifiers){
     let q = parts.join(' ').replace(/\s+/g,' ').trim();
-    if (cond === 'raw') q += ' -PSA -BGS -SGC';
-    if (cond === 'psa10') q += ' PSA 10 -BGS -SGC';
-    if (cond === 'psa9') q += ' PSA 9 -BGS -SGC';
-    if (excludeLots) q += ' -lot -bundle -reprint -custom -proxy -facsimile -reproduction';
+    if (modifiers?.length) q += ' ' + modifiers.join(' ');
     return enc(q);
   }
   function buildParams(sold){
@@ -105,13 +117,9 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
     const bin = document.getElementById('bin').checked;
     const minP = document.getElementById('minPrice').value;
     const maxP = document.getElementById('maxPrice').value;
-    const titleDesc = document.getElementById('titleDesc').checked;
+    const titleDesc = document.getElementById('titleDesc')?.checked;
     let params = '';
-    if (sold) {
-      params += '&LH_Sold=1&LH_Complete=1&_sop=13'; // sold + completed, newest first
-    } else {
-      params += '&_sop=12'; // active, newly listed
-    }
+    params += sold ? '&LH_Sold=1&LH_Complete=1&_sop=13' : '&_sop=12';
     if (cat) params += '&_sacat=' + encodeURIComponent(cat);
     if (auction) params += '&LH_Auction=1';
     if (bin) params += '&LH_BIN=1';
@@ -120,25 +128,64 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
     if (titleDesc) params += '&LH_TitleDesc=1';
     return params;
   }
+  function condMods(){
+    const mods = [];
+    if (document.getElementById('condRaw')?.checked) mods.push('-PSA -BGS -SGC');
+    if (document.getElementById('condPSA10')?.checked) mods.push('PSA 10 -BGS -SGC');
+    if (document.getElementById('condPSA9')?.checked)  mods.push('PSA 9 -BGS -SGC');
+    if (document.getElementById('condBGS95')?.checked) mods.push('BGS 9.5 -PSA -SGC');
+    if (document.getElementById('condSGC10')?.checked) mods.push('SGC 10 -PSA -BGS');
+    if (document.getElementById('condCGC10')?.checked) mods.push('CGC 10 -PSA -BGS -SGC');
+    return mods.length ? mods : [''];
+  }
+  function synonymParts(parts){
+    const out = [parts];
+    if (document.getElementById('synRC')?.checked){
+      out.push(parts.map(x=> x.replace(/\bRC\b/gi,'"Rookie Card"')));
+    }
+    if (document.getElementById('synRefractor')?.checked){
+      out.push(parts.map(x=> x.replace(/\bRefractor\b/gi,'"Silver Prizm"')));
+    }
+    if (document.getElementById('synNumbering')?.checked){
+      out.push(parts.map(x=> x.replace(/\/(\d{1,3})\b/g,'#/$1')));
+    }
+    const seen = new Set();
+    const uniq = [];
+    for (const arr of out){ const key = arr.join(' '); if(!seen.has(key)){ seen.add(key); uniq.push(arr); } }
+    return uniq;
+  }
+  function buildUrls(sold, allVariants){
+    const { parts, excludeLots } = baseParts();
+    const partSets = allVariants ? synonymParts(parts) : [parts];
+    const cmods = condMods();
+    const urls = [];
+    for (const p of partSets){
+      for (const m of cmods){
+        const mods = [];
+        if (m) mods.push(m);
+        if (excludeLots) mods.push('-lot -bundle -reprint -custom -proxy -facsimile -reproduction');
+        const q = toQuery(p, mods);
+        urls.push('https://www.ebay.com/sch/i.html?_nkw=' + q + buildParams(sold));
+      }
+    }
+    return urls;
+  }
   function openUrl(sold){
-    const q = buildQuery();
-    const base = 'https://www.ebay.com/sch/i.html?_nkw=' + q;
-    const params = buildParams(sold);
-    window.open(base + params, '_blank');
+    buildUrls(sold, false).forEach(u=> window.open(u, '_blank'));
+  }
+  function openUrlAll(sold){
+    buildUrls(sold, true).forEach(u=> window.open(u, '_blank'));
   }
   function copyLink(){
-    const q = buildQuery();
-    const base = 'https://www.ebay.com/sch/i.html?_nkw=' + q;
-    const params = buildParams(true); // default to sold link for copying
-    const url = base + params;
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(url).then(()=>alert('Link copied to clipboard')).catch(()=>alert(url));
-    } else {
-      alert(url);
-    }
+    const urls = buildUrls(true, false);
+    const url = urls[0];
+    if (navigator.clipboard?.writeText) navigator.clipboard.writeText(url).then(()=>alert('Link copied to clipboard')).catch(()=>alert(url));
+    else alert(url);
   }
   document.getElementById('sold').addEventListener('click', () => openUrl(true));
   document.getElementById('active').addEventListener('click', () => openUrl(false));
+  document.getElementById('soldAll').addEventListener('click', () => openUrlAll(true));
+  document.getElementById('activeAll').addEventListener('click', () => openUrlAll(false));
   document.getElementById('copy').addEventListener('click', copyLink);
 })();
 </script>
