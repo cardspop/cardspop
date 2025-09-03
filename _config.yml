@@ -4,7 +4,7 @@ theme: minima
 
 # Project Page under /cardspop
 url: https://cardspop.github.io
-baseurl: /cardspop
+# baseurl removed for root site
 
 # Optional but nice: enables RSS and good meta tags
 plugins:
