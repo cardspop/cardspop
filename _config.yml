@@ -6,6 +6,9 @@ theme: minima
 url: https://cardspop.github.io
 baseurl: /cardspop
 
+# Put posts under /blog/ path
+permalink: /blog/:year/:month/:day/:title:output_ext
+
 # Optional but nice: enables RSS and good meta tags
 plugins:
   - jekyll-feed
@@ -18,3 +21,4 @@ minima:
 # Show About in the header nav
 header_pages:
   - about.md
+  - blog/index.md
