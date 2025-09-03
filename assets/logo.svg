@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="40" viewBox="0 0 180 40" role="img" aria-label="CardsPop.io">
+  <defs>
+    <style>
+      .navy{fill:#0C2340}
+      .red{fill:#C8102E}
+      .white{fill:#ffffff}
+      .text{font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; font-weight:700}
+    </style>
+  </defs>
+  <!-- overlapping card shapes -->
+  <rect x="6" y="6" rx="4" ry="4" width="22" height="28" class="navy" opacity="0.95"/>
+  <rect x="16" y="4" rx="4" ry="4" width="22" height="28" class="red" opacity="0.9"/>
+  <!-- wordmark -->
+  <text x="46" y="26" class="text navy" font-size="18">Cards</text>
+  <text x="86" y="26" class="text red" font-size="18">Pop</text>
+  <text x="126" y="26" class="text navy" font-size="16">.io</text>
+</svg>
+

@@ -1,6 +1,9 @@
 <header class="site-header" role="banner">
   <div class="wrapper">
-    <a class="site-title" rel="author" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+    <a class="site-title" rel="author" href="{{ '/' | relative_url }}">
+      <img class="logo" src="{{ '/assets/logo.svg' | relative_url }}" alt="{{ site.title }}" />
+      <span class="sr-only">{{ site.title }}</span>
+    </a>
 
     <nav class="site-nav" aria-label="Main Navigation">
       {%- assign default_paths = site.header_pages | default: [] -%}
@@ -11,6 +14,7 @@
           <a class="page-link" href="{{ my_page.url | relative_url }}">{{ my_page.title | escape }}</a>
         {%- endif -%}
       {%- endfor -%}
+      <a class="btn nav-cta" href="{{ '/tools/comps/' | relative_url }}">Comp a Card</a>
     </nav>
   </div>
 </header>

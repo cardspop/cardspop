@@ -35,8 +35,11 @@ body {
 /* Header/nav */
 .site-header { border-bottom: 1px solid var(--border); }
 .site-title, .site-title:visited { color: var(--text); font-weight: 700; }
+.site-header .logo { height: 28px; display:inline-block; vertical-align: middle; }
+.sr-only { position:absolute; width:1px; height:1px; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
 .site-nav .page-link { color: var(--muted); }
 .site-nav .page-link:hover { color: var(--text); }
+.site-nav .nav-cta { margin-left: .75rem; }
 
 /* Links */
 a { color: var(--accent); }
