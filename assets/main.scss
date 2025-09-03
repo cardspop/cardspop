@@ -1,7 +1,7 @@
 ---
 ---
 @import "minima";
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+/* fonts are linked via HTML <link>; no CSS import here to avoid duplication */
 
 /* Minimal modern look & feel overrides for Minima (light theme only) */
 
@@ -23,7 +23,16 @@ body {
   font-family: var(--font-sans);
   background: var(--bg);
   color: var(--text);
+  line-height: 1.6;
 }
+
+/* Typography scale */
+h1, h2, h3 { font-weight: 700; line-height: 1.25; margin: 0.6em 0 0.4em; }
+h1 { font-size: clamp(1.8rem, 3vw, 2.2rem); }
+h2 { font-size: clamp(1.4rem, 2.4vw, 1.8rem); }
+h3 { font-size: clamp(1.15rem, 2vw, 1.3rem); }
+p, ul, ol { margin: 0.6em 0; }
+ul, ol { padding-left: 1.2em; }
 
 /* Layout width */
 .page-content .wrapper,
@@ -53,7 +62,7 @@ a:hover { text-decoration: none; filter: brightness(0.9); }
   margin-bottom: 1rem;
   transition: transform .05s ease, background .2s ease;
 }
-.home .post-list > li:hover { transform: translateY(-1px); background: rgba(0,0,0,0.03); }
+.home .post-list > li:hover { transform: translateY(-1px); background: rgba(12,35,64,0.04); }
 .post-list .post-link { font-weight: 600; }
 .post-meta { color: var(--muted); }
 
@@ -85,6 +94,15 @@ pre { border-radius: 8px; }
   radial-gradient(1200px 400px at 10% -20%, rgba(12, 35, 64, 0.24), transparent 60%),
   radial-gradient(1200px 400px at 90% -20%, rgba(200, 16, 46, 0.22), transparent 60%);
 }
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; }
+th, td { border-bottom: 1px solid var(--border); padding: .5rem; text-align: left; }
+tr:hover { background: rgba(12,35,64,0.04); }
+
+/* Footer tweaks */
+.site-footer { border-top: 1px solid var(--border); }
+.site-footer a { color: var(--accent); }
 
 /* Buttons */
 .btn {
