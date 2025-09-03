@@ -109,8 +109,20 @@ pre { border-radius: 8px; }
 
 /* Hero */
 .hero { padding: 2.5rem 0 1.25rem; border-bottom: 1px solid var(--border); background:
-  radial-gradient(1200px 400px at 10% -20%, rgba(12, 35, 64, 0.12), transparent 60%),
-  radial-gradient(1200px 400px at 90% -20%, rgba(200, 16, 46, 0.12), transparent 60%);
+  radial-gradient(1200px 400px at 10% -20%, rgba(12, 35, 64, 0.16), transparent 60%),
+  radial-gradient(1200px 400px at 90% -20%, rgba(200, 16, 46, 0.16), transparent 60%);
+}
+
+/* Stronger, lighter-tinted gradient for dark mode for better visibility */
+@media (prefers-color-scheme: dark) {
+  .hero { background:
+    radial-gradient(1200px 400px at 10% -20%, rgba(91, 125, 177, 0.35), transparent 60%),
+    radial-gradient(1200px 400px at 90% -20%, rgba(200, 16, 46, 0.25), transparent 60%);
+  }
+}
+html[data-theme='dark'] .hero { background:
+  radial-gradient(1200px 400px at 10% -20%, rgba(91, 125, 177, 0.35), transparent 60%),
+  radial-gradient(1200px 400px at 90% -20%, rgba(200, 16, 46, 0.25), transparent 60%);
 }
 .hero__title { margin: 0; font-size: clamp(1.75rem, 3vw, 2.25rem); line-height: 1.2; }
 .hero__tagline { margin: .5rem 0 0; color: var(--muted); }
