@@ -24,11 +24,34 @@ Build a quick eBay search for sold or active listings. This does not track you o
     </label>
   </div>
   <div class="row">
+    <label>Sport / Category
+      <select id="category">
+        <option value="">All Cards</option>
+        <option value="213">Baseball</option>
+        <option value="214">Basketball</option>
+        <option value="57988">Football</option>
+        <option value="261328">Soccer</option>
+        <option value="26320">Hockey</option>
+      </select>
+    </label>
+    <label>Price Min
+      <input type="number" id="minPrice" placeholder="10" min="0" step="1">
+    </label>
+    <label>Price Max
+      <input type="number" id="maxPrice" placeholder="500" min="0" step="1">
+    </label>
+  </div>
+  <div class="row">
     <fieldset>
       <legend>Condition filter</legend>
       <label><input type="radio" name="cond" value="raw" checked> Raw</label>
       <label><input type="radio" name="cond" value="psa10"> PSA 10</label>
       <label><input type="radio" name="cond" value="psa9"> PSA 9</label>
+    </fieldset>
+    <fieldset>
+      <legend>Listing type</legend>
+      <label><input type="checkbox" id="auction"> Auctions</label>
+      <label><input type="checkbox" id="bin"> Buy It Now</label>
     </fieldset>
   </div>
   <div class="row">
@@ -57,10 +80,29 @@ Build a quick eBay search for sold or active listings. This does not track you o
     if (cond === 'psa9') q += ' PSA 9 -BGS -SGC';
     return enc(q);
   }
+  function buildParams(sold){
+    const cat = document.getElementById('category').value;
+    const auction = document.getElementById('auction').checked;
+    const bin = document.getElementById('bin').checked;
+    const minP = document.getElementById('minPrice').value;
+    const maxP = document.getElementById('maxPrice').value;
+    let params = '';
+    if (sold) {
+      params += '&LH_Sold=1&LH_Complete=1&_sop=13'; // sold + completed, newest first
+    } else {
+      params += '&_sop=12'; // active, newly listed
+    }
+    if (cat) params += '&_sacat=' + encodeURIComponent(cat);
+    if (auction) params += '&LH_Auction=1';
+    if (bin) params += '&LH_BIN=1';
+    if (minP) params += '&_udlo=' + encodeURIComponent(minP);
+    if (maxP) params += '&_udhi=' + encodeURIComponent(maxP);
+    return params;
+  }
   function openUrl(sold){
     const q = buildQuery();
     const base = 'https://www.ebay.com/sch/i.html?_nkw=' + q;
-    const params = sold ? '&LH_Sold=1&LH_Complete=1&_sop=13' : '&_sop=12';
+    const params = buildParams(sold);
     window.open(base + params, '_blank');
   }
   document.getElementById('sold').addEventListener('click', () => openUrl(true));
@@ -72,7 +114,7 @@ Build a quick eBay search for sold or active listings. This does not track you o
 .comp-form { margin-top: 1rem; }
 .comp-form .row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: .75rem; }
 .comp-form label { display: flex; flex-direction: column; font-weight: 600; color: var(--muted); }
-.comp-form input[type="text"], .comp-form input[type="number"] { padding: .55rem .6rem; border-radius: 8px; border: 1px solid var(--border); min-width: 15rem; }
+.comp-form input[type="text"], .comp-form input[type="number"], .comp-form select { padding: .55rem .6rem; border-radius: 8px; border: 1px solid var(--border); min-width: 15rem; }
 fieldset { border: 1px solid var(--border); border-radius: 8px; padding: .5rem .75rem; }
 legend { padding: 0 .25rem; color: var(--muted); }
 </style>
@@ -82,4 +124,4 @@ Tips
 - Add specific card numbers if needed (e.g., `#150`).
 - Exclude lots with `-lot -bundle` in Parallel/Insert field.
 - For auctions only, add `&_sacat=0&LH_Auction=1` to the eBay URL.
-
+- Categories: Baseball (213), Basketball (214), Football (57988), Soccer (261328), Hockey (26320).
