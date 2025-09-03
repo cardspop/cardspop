@@ -104,3 +104,11 @@ pre { border-radius: 8px; }
 .btn--secondary:visited { color: #fff; }
 .btn--secondary:hover { filter: brightness(0.92); }
 .btn--secondary:focus-visible { outline-color: var(--brand-red); }
+
+/* CTA button (landing) */
+.btn--cta {
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}

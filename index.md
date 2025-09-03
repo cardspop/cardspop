@@ -8,7 +8,7 @@ title: Home
     <h1 class="hero__title">{{ site.title | escape }}</h1>
     <p class="hero__tagline">{{ site.description | escape }}</p>
     <p style="margin-top:1rem">
-      <a class="btn" href="{{ '/blog/' | relative_url }}">Read the blog →</a>
+      <a class="btn btn--cta" href="{{ '/blog/' | relative_url }}">Read the Blog →</a>
       <a class="btn btn--secondary" style="margin-left:.5rem" href="https://github.com/cardspop">GitHub</a>
     </p>
   </div>
