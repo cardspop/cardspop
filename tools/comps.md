@@ -24,6 +24,9 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
     <label>Parallel / Insert
       <input type="text" id="parallel" placeholder="Rainbow Foil, Gold /50, Refractor">
     </label>
+    <label>Card #
+      <input type="text" id="cardNo" placeholder="#150">
+    </label>
   </div>
   <div class="row">
     <label>Sport / Category
@@ -55,10 +58,18 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
       <label><input type="checkbox" id="auction"> Auctions</label>
       <label><input type="checkbox" id="bin"> Buy It Now</label>
     </fieldset>
+    <fieldset>
+      <legend>Search options</legend>
+      <label><input type="checkbox" id="exactPlayer"> Exact player</label>
+      <label><input type="checkbox" id="exactParallel"> Exact parallel</label>
+      <label><input type="checkbox" id="titleDesc"> Title + description</label>
+      <label><input type="checkbox" id="excludeLots" checked> Exclude lots/reprints</label>
+    </fieldset>
   </div>
   <div class="row">
     <button class="btn" id="sold">Open Sold</button>
     <button class="btn btn--secondary" id="active" style="margin-left:.5rem">Open Active</button>
+    <button class="btn" id="copy" style="margin-left:.5rem">Copy Link</button>
   </div>
 </form>
 
@@ -70,16 +81,22 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
     const brand = document.getElementById('brand').value.trim();
     const player = document.getElementById('player').value.trim();
     const parallel = document.getElementById('parallel').value.trim();
+    const cardNo = document.getElementById('cardNo').value.trim();
+    const exactPlayer = document.getElementById('exactPlayer').checked;
+    const exactParallel = document.getElementById('exactParallel').checked;
+    const excludeLots = document.getElementById('excludeLots').checked;
     const cond = (document.querySelector('input[name="cond"]:checked')||{}).value;
     let parts = [];
     if (year) parts.push(year);
     if (brand) parts.push(brand);
-    if (player) parts.push(player);
-    if (parallel) parts.push(parallel);
+    if (player) parts.push(exactPlayer ? `"${player}"` : player);
+    if (parallel) parts.push(exactParallel ? `"${parallel}"` : parallel);
+    if (cardNo) parts.push(cardNo.startsWith('#') ? cardNo : `#${cardNo}`);
     let q = parts.join(' ').replace(/\s+/g,' ').trim();
     if (cond === 'raw') q += ' -PSA -BGS -SGC';
     if (cond === 'psa10') q += ' PSA 10 -BGS -SGC';
     if (cond === 'psa9') q += ' PSA 9 -BGS -SGC';
+    if (excludeLots) q += ' -lot -bundle -reprint -custom -proxy -facsimile -reproduction';
     return enc(q);
   }
   function buildParams(sold){
@@ -88,6 +105,7 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
     const bin = document.getElementById('bin').checked;
     const minP = document.getElementById('minPrice').value;
     const maxP = document.getElementById('maxPrice').value;
+    const titleDesc = document.getElementById('titleDesc').checked;
     let params = '';
     if (sold) {
       params += '&LH_Sold=1&LH_Complete=1&_sop=13'; // sold + completed, newest first
@@ -99,6 +117,7 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
     if (bin) params += '&LH_BIN=1';
     if (minP) params += '&_udlo=' + encodeURIComponent(minP);
     if (maxP) params += '&_udhi=' + encodeURIComponent(maxP);
+    if (titleDesc) params += '&LH_TitleDesc=1';
     return params;
   }
   function openUrl(sold){
@@ -107,8 +126,20 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
     const params = buildParams(sold);
     window.open(base + params, '_blank');
   }
+  function copyLink(){
+    const q = buildQuery();
+    const base = 'https://www.ebay.com/sch/i.html?_nkw=' + q;
+    const params = buildParams(true); // default to sold link for copying
+    const url = base + params;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(()=>alert('Link copied to clipboard')).catch(()=>alert(url));
+    } else {
+      alert(url);
+    }
+  }
   document.getElementById('sold').addEventListener('click', () => openUrl(true));
   document.getElementById('active').addEventListener('click', () => openUrl(false));
+  document.getElementById('copy').addEventListener('click', copyLink);
 })();
 </script>
 
