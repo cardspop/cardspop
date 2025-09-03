@@ -1,0 +1,13 @@
+title: Your Blog Title
+description: Notes, tutorials, and resources.
+theme: minima
+
+# Optional but nice: enables RSS and good meta tags
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Customize as you like later
+minima:
+  skin: auto
+
