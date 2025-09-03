@@ -15,3 +15,7 @@ plugins:
 # Customize as you like later
 minima:
   skin: auto
+
+# Show About in the header nav
+header_pages:
+  - about.md

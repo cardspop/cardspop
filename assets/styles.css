@@ -1,7 +1,67 @@
-/* Simple site-wide tweaks */
-img { max-width: 100%; height: auto; }
+/* Minimal modern look & feel overrides for Minima */
 
-/* Responsive video embeds using aspect-ratio */
+:root {
+  --font-sans: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  --bg: #ffffff;
+  --text: #0f172a;     /* slate-900 */
+  --muted: #475569;    /* slate-500 */
+  --border: #e2e8f0;   /* slate-200 */
+  --accent: #2563eb;   /* blue-600 */
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0b1020;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --border: #22304a;
+    --accent: #60a5fa; /* blue-400 */
+  }
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* Layout width */
+.page-content .wrapper,
+.site-header .wrapper,
+.site-footer .wrapper {
+  max-width: 860px;
+}
+
+/* Header/nav */
+.site-header { border-bottom: 1px solid var(--border); }
+.site-title, .site-title:visited { color: var(--text); font-weight: 700; }
+.site-nav .page-link { color: var(--muted); }
+.site-nav .page-link:hover { color: var(--text); }
+
+/* Links */
+a { color: var(--accent); }
+a:hover { text-decoration: none; filter: brightness(0.9); }
+
+/* Post list cards */
+.home .post-list > li { 
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+  transition: transform .05s ease, background .2s ease;
+}
+.home .post-list > li:hover { transform: translateY(-1px); background: rgba(0,0,0,0.02); }
+.post-list .post-link { font-weight: 600; }
+.post-meta { color: var(--muted); }
+
+/* Images */
+img { max-width: 100%; height: auto; border-radius: 6px; }
+
+/* Code blocks */
+pre, code { font-size: 0.95em; }
+pre { border-radius: 8px; }
+
+/* Responsive video embeds */
 .video { 
   width: 100%;
   aspect-ratio: 16 / 9;
@@ -15,9 +75,4 @@ img { max-width: 100%; height: auto; }
   width: 100%; 
   height: 100%;
 }
-.video .caption {
-  font-size: 0.9rem;
-  color: #666;
-  margin-top: 0.25rem;
-}
-
+.video .caption { font-size: 0.9rem; color: var(--muted); margin-top: 0.25rem; }
