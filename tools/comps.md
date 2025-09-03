@@ -66,7 +66,7 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
       <label><input type="checkbox" id="exactPlayer"> Exact player</label>
       <label><input type="checkbox" id="exactParallel"> Exact parallel</label>
       <label><input type="checkbox" id="titleDesc"> Title + description</label>
-      <label><input type="checkbox" id="excludeLots" checked> Exclude lots/reprints</label>
+      <label><input type="checkbox" id="excludeLots" checked> Exclude lots</label>
     </fieldset>
   </div>
   <div class="row">
@@ -177,7 +177,7 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
       for (const m of cmods){
         const mods = [];
         if (m) mods.push(m);
-        if (excludeLots) mods.push('-lot -bundle -reprint -custom -proxy -facsimile -reproduction');
+        if (excludeLots) mods.push('-lot -bundle');
         const q = toQuery(p, mods);
         urls.push('https://www.ebay.com/sch/i.html?_nkw=' + q + buildParams(sold));
       }
