@@ -47,6 +47,27 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
     </label>
   </div>
   <div class="row">
+    <label>Marketplace
+      <select id="domain">
+        <option value="com">ebay.com (US)</option>
+        <option value="co.uk">ebay.co.uk (UK)</option>
+        <option value="ca">ebay.ca (CA)</option>
+      </select>
+    </label>
+    <label>Sort
+      <select id="sort">
+        <option value="">Best Match</option>
+        <option value="12">Newly Listed</option>
+        <option value="1">Ending Soonest</option>
+        <option value="15">Price+Ship: Lowest</option>
+        <option value="16">Price+Ship: Highest</option>
+        <option value="13">Recently Ended (Sold)</option>
+      </select>
+    </label>
+    <label><input type="checkbox" id="freeShip"> Free Shipping</label>
+    <label><input type="checkbox" id="returns"> Returns Accepted</label>
+  </div>
+  <div class="row">
     <fieldset>
       <legend>Condition filters</legend>
       <label><input type="checkbox" id="condRaw" checked> Raw</label>
@@ -133,13 +154,17 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
     const maxP = document.getElementById('maxPrice').value;
     const titleDesc = document.getElementById('titleDesc')?.checked;
     let params = '';
-    params += sold ? '&LH_Sold=1&LH_Complete=1&_sop=13' : '&_sop=12';
+    if (sold) params += '&LH_Sold=1&LH_Complete=1';
+    const sort = document.getElementById('sort').value;
+    if (sort) params += '&_sop=' + encodeURIComponent(sort);
     if (cat) params += '&_sacat=' + encodeURIComponent(cat);
     if (auction) params += '&LH_Auction=1';
     if (bin) params += '&LH_BIN=1';
     if (minP) params += '&_udlo=' + encodeURIComponent(minP);
     if (maxP) params += '&_udhi=' + encodeURIComponent(maxP);
     if (titleDesc) params += '&LH_TitleDesc=1';
+    if (document.getElementById('freeShip').checked) params += '&LH_FS=1';
+    if (document.getElementById('returns').checked) params += '&LH_Returns=1';
     return params;
   }
   function condMods(){
@@ -179,7 +204,8 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
         if (m) mods.push(m);
         if (excludeLots) mods.push('-lot -bundle');
         const q = toQuery(p, mods);
-        urls.push('https://www.ebay.com/sch/i.html?_nkw=' + q + buildParams(sold));
+        const dom = document.getElementById('domain').value || 'com';
+        urls.push('https://www.ebay.' + dom + '/sch/i.html?_nkw=' + q + buildParams(sold));
       }
     }
     return urls;
