@@ -9,10 +9,13 @@ Build a quick eBay search for sold or active listings. This does not track you o
 Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · [How to Grade Cards]({{ '/guides/grading/' | relative_url }})
 
 <div class="examples" aria-label="Examples">
-  <strong>Examples:</strong>
-  <button class="chip" data-preset="ohtani-refractor">Ohtani · Chrome Refractor</button>
-  <button class="chip" data-preset="elly-rainbow">Elly · Rainbow Foil</button>
-  <button class="chip" data-preset="julio-rc">Julio · RC #150</button>
+  <label for="preset"><strong>Examples:</strong></label>
+  <select id="preset">
+    <option value="">Select an example…</option>
+    <option value="ohtani-refractor">Ohtani · Chrome Refractor</option>
+    <option value="elly-rainbow">Elly · Rainbow Foil</option>
+    <option value="julio-rc">Julio · RC #150</option>
+  </select>
 </div>
 
 <form id="comp-form" class="comp-form" onsubmit="return false;">
@@ -301,8 +304,9 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
     }
     renderResults(true,false);
   }
-  document.querySelectorAll('.examples .chip').forEach(btn=>{
-    btn.addEventListener('click', ()=> applyPreset(btn.dataset.preset));
+  const presetSel = document.getElementById('preset');
+  presetSel.addEventListener('change', ()=>{
+    if (presetSel.value) applyPreset(presetSel.value);
   });
 })();
 </script>
