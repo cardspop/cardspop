@@ -82,22 +82,24 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
   </details>
   <details class="advanced">
     <summary>Advanced Options (Power Users)</summary>
-    <div class="row">
-    <fieldset>
-      <legend>Condition filters</legend>
-      <label><input type="checkbox" id="condRaw" checked> Raw</label>
-      <label><input type="checkbox" id="condPSA10"> PSA 10</label>
-      <label><input type="checkbox" id="condPSA9"> PSA 9</label>
-      <label><input type="checkbox" id="condBGS95"> BGS 9.5</label>
-      <label><input type="checkbox" id="condSGC10"> SGC 10</label>
-      <label><input type="checkbox" id="condCGC10"> CGC 10</label>
+  <div class="row">
+    <label class="stack">Condition filters (multi‑select)
+      <select id="condSelect" multiple size="6">
+        <option value="raw" selected>Raw</option>
+        <option value="psa10">PSA 10</option>
+        <option value="psa9">PSA 9</option>
+        <option value="bgs95">BGS 9.5</option>
+        <option value="sgc10">SGC 10</option>
+        <option value="cgc10">CGC 10</option>
+      </select>
       <button type="button" class="chip" id="slabOnly">Slabbed only</button>
-    </fieldset>
-    <fieldset>
-      <legend>Listing type</legend>
-      <label><input type="checkbox" id="auction"> Auctions</label>
-      <label><input type="checkbox" id="bin"> Buy It Now</label>
-    </fieldset>
+    </label>
+    <label class="stack">Listing type (multi‑select)
+      <select id="listingType" multiple size="2">
+        <option value="auction">Auctions</option>
+        <option value="bin">Buy It Now</option>
+      </select>
+    </label>
     <fieldset>
       <legend>Search options</legend>
       <label><input type="checkbox" id="exactPlayer"> Exact player</label>
@@ -107,12 +109,13 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
     </fieldset>
     </div>
     <div class="row">
-    <fieldset>
-      <legend>Synonym presets</legend>
-      <label><input type="checkbox" id="synRC"> RC ↔ Rookie Card</label>
-      <label><input type="checkbox" id="synRefractor"> Refractor ↔ Silver Prizm</label>
-      <label><input type="checkbox" id="synNumbering"> /xx ↔ #/xx</label>
-    </fieldset>
+    <label class="stack">Synonym presets (multi‑select)
+      <select id="synonyms" multiple size="3">
+        <option value="rc">RC ↔ Rookie Card</option>
+        <option value="refractor">Refractor ↔ Silver Prizm</option>
+        <option value="numbering">/xx ↔ #/xx</option>
+      </select>
+    </label>
     </div>
   </details>
   <div class="row">
@@ -174,8 +177,7 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
   }
   function buildParams(sold){
     const cat = document.getElementById('category').value;
-    const auction = document.getElementById('auction').checked;
-    const bin = document.getElementById('bin').checked;
+    const listing = Array.from(document.getElementById('listingType').selectedOptions).map(o=>o.value);
     const minP = document.getElementById('minPrice').value;
     const maxP = document.getElementById('maxPrice').value;
     const titleDesc = document.getElementById('titleDesc')?.checked;
@@ -185,8 +187,8 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
     if (sort) params += '&_sop=' + encodeURIComponent(sort);
     else params += sold ? '&_sop=13' : '&_sop=12';
     if (cat) params += '&_sacat=' + encodeURIComponent(cat);
-    if (auction) params += '&LH_Auction=1';
-    if (bin) params += '&LH_BIN=1';
+    if (listing.includes('auction')) params += '&LH_Auction=1';
+    if (listing.includes('bin')) params += '&LH_BIN=1';
     if (minP) params += '&_udlo=' + encodeURIComponent(minP);
     if (maxP) params += '&_udhi=' + encodeURIComponent(maxP);
     if (titleDesc) params += '&LH_TitleDesc=1';
@@ -195,24 +197,28 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
     return params;
   }
   function condMods(){
-    const mods = [];
-    if (document.getElementById('condRaw')?.checked) mods.push('-PSA -BGS -SGC');
-    if (document.getElementById('condPSA10')?.checked) mods.push('PSA 10 -BGS -SGC');
-    if (document.getElementById('condPSA9')?.checked)  mods.push('PSA 9 -BGS -SGC');
-    if (document.getElementById('condBGS95')?.checked) mods.push('BGS 9.5 -PSA -SGC');
-    if (document.getElementById('condSGC10')?.checked) mods.push('SGC 10 -PSA -BGS');
-    if (document.getElementById('condCGC10')?.checked) mods.push('CGC 10 -PSA -BGS -SGC');
+    const selected = Array.from(document.getElementById('condSelect').selectedOptions).map(o=>o.value);
+    const map = {
+      raw:   '-PSA -BGS -SGC',
+      psa10: 'PSA 10 -BGS -SGC',
+      psa9:  'PSA 9 -BGS -SGC',
+      bgs95: 'BGS 9.5 -PSA -SGC',
+      sgc10: 'SGC 10 -PSA -BGS',
+      cgc10: 'CGC 10 -PSA -BGS -SGC'
+    };
+    const mods = selected.map(v=> map[v]).filter(Boolean);
     return mods.length ? mods : [''];
   }
   function synonymParts(parts){
+    const selected = Array.from(document.getElementById('synonyms').selectedOptions).map(o=>o.value);
     const out = [parts];
-    if (document.getElementById('synRC')?.checked){
+    if (selected.includes('rc')){
       out.push(parts.map(x=> x.replace(/\bRC\b/gi,'"Rookie Card"')));
     }
-    if (document.getElementById('synRefractor')?.checked){
+    if (selected.includes('refractor')){
       out.push(parts.map(x=> x.replace(/\bRefractor\b/gi,'"Silver Prizm"')));
     }
-    if (document.getElementById('synNumbering')?.checked){
+    if (selected.includes('numbering')){
       out.push(parts.map(x=> x.replace(/\/(\d{1,3})\b/g,'#/$1')));
     }
     const seen = new Set();
@@ -278,14 +284,12 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
 
   // Slabbed only toggle
   document.getElementById('slabOnly').addEventListener('click', ()=>{
-    const ids = ['condRaw','condPSA10','condPSA9','condBGS95','condSGC10','condCGC10'];
-    const el = id=> document.getElementById(id);
-    el('condRaw').checked = false;
-    el('condPSA10').checked = true;
-    el('condPSA9').checked = true;
-    el('condBGS95').checked = true;
-    el('condSGC10').checked = true;
-    el('condCGC10').checked = true;
+    const sel = document.getElementById('condSelect');
+    Array.from(sel.options).forEach(o=> o.selected = false);
+    ['psa10','psa9','bgs95','sgc10','cgc10'].forEach(val=>{
+      const opt = Array.from(sel.options).find(o=> o.value===val);
+      if (opt) opt.selected = true;
+    });
   });
 
   // Example chips
@@ -316,6 +320,7 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
 .comp-form .row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: .75rem; }
 .comp-form label { display: flex; flex-direction: column; font-weight: 600; color: var(--muted); }
 .comp-form input[type="text"], .comp-form input[type="number"], .comp-form select { padding: .55rem .6rem; border-radius: 8px; border: 1px solid var(--border); min-width: 15rem; }
+label.stack select { min-width: 14rem; }
 fieldset { border: 1px solid var(--border); border-radius: 8px; padding: .5rem .75rem; }
 legend { padding: 0 .25rem; color: var(--muted); }
 .examples { margin:.5rem 0 1rem; display:flex; gap:.5rem; align-items:center; flex-wrap:wrap; }
