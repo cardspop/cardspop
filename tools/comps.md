@@ -8,6 +8,13 @@ Build a quick eBay search for sold or active listings. This does not track you o
 
 Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · [How to Grade Cards]({{ '/guides/grading/' | relative_url }})
 
+<div class="examples" aria-label="Examples">
+  <strong>Examples:</strong>
+  <button class="chip" data-preset="ohtani-refractor">Ohtani · Chrome Refractor</button>
+  <button class="chip" data-preset="elly-rainbow">Elly · Rainbow Foil</button>
+  <button class="chip" data-preset="julio-rc">Julio · RC #150</button>
+</div>
+
 <form id="comp-form" class="comp-form" onsubmit="return false;">
   <div class="row">
     <label>Year
@@ -46,7 +53,9 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
       <input type="number" id="maxPrice" placeholder="500" min="0" step="1">
     </label>
   </div>
-  <div class="row">
+  <details class="advanced" open>
+    <summary>Advanced Filters</summary>
+    <div class="row">
     <label>Marketplace
       <select id="domain">
         <option value="com">ebay.com (US)</option>
@@ -66,8 +75,11 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
     </label>
     <label><input type="checkbox" id="freeShip"> Free Shipping</label>
     <label><input type="checkbox" id="returns"> Returns Accepted</label>
-  </div>
-  <div class="row">
+    </div>
+  </details>
+  <details class="advanced">
+    <summary>Advanced Options (Power Users)</summary>
+    <div class="row">
     <fieldset>
       <legend>Condition filters</legend>
       <label><input type="checkbox" id="condRaw" checked> Raw</label>
@@ -76,6 +88,7 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
       <label><input type="checkbox" id="condBGS95"> BGS 9.5</label>
       <label><input type="checkbox" id="condSGC10"> SGC 10</label>
       <label><input type="checkbox" id="condCGC10"> CGC 10</label>
+      <button type="button" class="chip" id="slabOnly">Slabbed only</button>
     </fieldset>
     <fieldset>
       <legend>Listing type</legend>
@@ -86,18 +99,19 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
       <legend>Search options</legend>
       <label><input type="checkbox" id="exactPlayer"> Exact player</label>
       <label><input type="checkbox" id="exactParallel"> Exact parallel</label>
-      <label><input type="checkbox" id="titleDesc"> Title + description</label>
+      <label title="Search listing descriptions (can add noise)"><input type="checkbox" id="titleDesc"> Search description</label>
       <label><input type="checkbox" id="excludeLots" checked> Exclude lots</label>
     </fieldset>
-  </div>
-  <div class="row">
+    </div>
+    <div class="row">
     <fieldset>
       <legend>Synonym presets</legend>
       <label><input type="checkbox" id="synRC"> RC ↔ Rookie Card</label>
       <label><input type="checkbox" id="synRefractor"> Refractor ↔ Silver Prizm</label>
       <label><input type="checkbox" id="synNumbering"> /xx ↔ #/xx</label>
     </fieldset>
-  </div>
+    </div>
+  </details>
   <div class="row">
     <button class="btn" id="sold">Open Sold</button>
     <button class="btn btn--secondary" id="active" style="margin-left:.5rem">Open Active</button>
@@ -124,6 +138,15 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
 <script>
 (function(){
   const enc = s => encodeURIComponent(s.trim()).replace(/%20/g, '+');
+  // remember marketplace/sort
+  try {
+    const savedDomain = localStorage.getItem('cards-domain');
+    const savedSort = localStorage.getItem('cards-sort');
+    if (savedDomain) document.getElementById('domain').value = savedDomain;
+    if (savedSort) document.getElementById('sort').value = savedSort;
+    document.getElementById('domain').addEventListener('change', e=> localStorage.setItem('cards-domain', e.target.value));
+    document.getElementById('sort').addEventListener('change', e=> localStorage.setItem('cards-sort', e.target.value));
+  } catch(e) {}
   function baseParts(){
     const year = document.getElementById('year').value.trim();
     const brand = document.getElementById('brand').value.trim();
@@ -157,6 +180,7 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
     if (sold) params += '&LH_Sold=1&LH_Complete=1';
     const sort = document.getElementById('sort').value;
     if (sort) params += '&_sop=' + encodeURIComponent(sort);
+    else params += sold ? '&_sop=13' : '&_sop=12';
     if (cat) params += '&_sacat=' + encodeURIComponent(cat);
     if (auction) params += '&LH_Auction=1';
     if (bin) params += '&LH_BIN=1';
@@ -222,9 +246,10 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
     const list = document.getElementById('results-list');
     const summary = document.getElementById('results-summary');
     list.innerHTML = '';
-    urls.forEach((u, i)=>{
+    // label links with condition/variant if encoded in query
+    urls.forEach((u)=>{
       const li = document.createElement('li');
-      li.innerHTML = `<a href="${u}" target="_blank">Link ${i+1}</a>`;
+      li.innerHTML = `<a href="${u}" target="_blank">${u.includes('PSA+10')?'PSA 10':u.includes('PSA+9')?'PSA 9':u.includes('BGS+9.5')?'BGS 9.5':u.includes('SGC+10')?'SGC 10':u.includes('CGC+10')?'CGC 10':'Raw'} · ${u.includes('Rookie+Card')?'RC→Rookie Card':u.includes('Silver+Prizm')?'Refractor→Silver Prizm':u.includes('%23%2F')?'/xx→#/xx':'Base'} · ebay.${(document.getElementById('domain').value||'com')}</a>`;
       list.appendChild(li);
     });
     summary.textContent = `${sold ? 'Sold' : 'Active'} · ${urls.length} link${urls.length!==1?'s':''}`;
@@ -247,6 +272,38 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
     document.querySelectorAll('#results-list a').forEach(a=> window.open(a.href, '_blank'));
   });
   document.getElementById('copy').addEventListener('click', copyLink);
+
+  // Slabbed only toggle
+  document.getElementById('slabOnly').addEventListener('click', ()=>{
+    const ids = ['condRaw','condPSA10','condPSA9','condBGS95','condSGC10','condCGC10'];
+    const el = id=> document.getElementById(id);
+    el('condRaw').checked = false;
+    el('condPSA10').checked = true;
+    el('condPSA9').checked = true;
+    el('condBGS95').checked = true;
+    el('condSGC10').checked = true;
+    el('condCGC10').checked = true;
+  });
+
+  // Example chips
+  function applyPreset(name){
+    const set = (id,val)=>{ const el=document.getElementById(id); el.value = val; };
+    const check = (id,val)=>{ const el=document.getElementById(id); el.checked = val; };
+    // reset basics
+    set('year',''); set('brand',''); set('player',''); set('parallel',''); set('cardNo','');
+    check('exactPlayer', true); check('exactParallel', false);
+    if (name==='ohtani-refractor'){
+      set('year','2024'); set('brand','Topps Chrome'); set('player','Shohei Ohtani'); set('parallel','Refractor');
+    } else if (name==='elly-rainbow'){
+      set('year','2024'); set('brand','Topps'); set('player','Elly De La Cruz'); set('parallel','Rainbow Foil');
+    } else if (name==='julio-rc'){
+      set('year','2022'); set('brand','Topps'); set('player','Julio Rodriguez'); set('cardNo','#150');
+    }
+    renderResults(true,false);
+  }
+  document.querySelectorAll('.examples .chip').forEach(btn=>{
+    btn.addEventListener('click', ()=> applyPreset(btn.dataset.preset));
+  });
 })();
 </script>
 
@@ -257,6 +314,10 @@ Related guides: [How to Comp Cards]({{ '/guides/comping/' | relative_url }}) · 
 .comp-form input[type="text"], .comp-form input[type="number"], .comp-form select { padding: .55rem .6rem; border-radius: 8px; border: 1px solid var(--border); min-width: 15rem; }
 fieldset { border: 1px solid var(--border); border-radius: 8px; padding: .5rem .75rem; }
 legend { padding: 0 .25rem; color: var(--muted); }
+.examples { margin:.5rem 0 1rem; display:flex; gap:.5rem; align-items:center; flex-wrap:wrap; }
+.chip { border:1px solid var(--border); background:transparent; padding:.35rem .6rem; border-radius:999px; cursor:pointer; }
+.advanced { border:1px solid var(--border); border-radius:10px; padding:.5rem .75rem; margin:.5rem 0; }
+.advanced > summary { cursor:pointer; font-weight:600; color: var(--muted); }
 .comp-results { margin-top: 1rem; }
 .comp-results .results-list { list-style: none; padding: 0; }
 .comp-results .results-list li { padding: .35rem 0; border-bottom: 1px solid var(--border); }
